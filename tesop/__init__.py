@@ -1,41 +1,45 @@
 import os
 import click
+import json
 from flask import Flask, send_from_directory
 from tesop.web import web as web
-from tesop import models
+from tesop.models import db
 
 app = Flask(__name__)
 
 app.config.update(
-    SECRET_KEY=os.environ.get('FLASK_SECRET_KEY'),
-    SQLALCHEMY_DATABASE_URI=os.environ.get('DB_URI'),
+    SECRET_KEY=os.getenv('FLASK_SECRET_KEY'),
+    SQLALCHEMY_DATABASE_URI=os.getenv('DB_URI'),
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
 )
 
-models.db.init_app(app)
+db.init_app(app)
 app.register_blueprint(web, url_prefix='/')
 
 
 @app.cli.command()
-def reset_db():
+def init_db():
     click.echo('Resetting database...')
-    models.db.drop_all()
-    models.db.create_all()
-    load_data('data.json')
+    reset_db()
     click.echo('Database reset.')
 
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static/images'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+def reset_db(path=None):
+    db.drop_all()
+    db.create_all()
+    if path:
+        load_data(path)
 
 
 def load_data(path):
-    pass
+    with open(path, 'r', encoding='utf-8') as file:
+        data_string = file.read()
+    data = json.loads(data_string)
+    for user in data['users']:
+        models.User.register(**user)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(ssl_context='adhoc')
 
 

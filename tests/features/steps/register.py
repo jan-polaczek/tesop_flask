@@ -17,12 +17,12 @@ def step_impl(context):
 
 @when("The user presses the submit button")
 def step_impl(context):
-    context.browser.find_element_by_xpath(f"//input[@type='submit' and @value='Submit']").click()
+    context.browser.find_element_by_xpath(f"//input[@type='submit']").click()
 
 
 @then("The user is successfully registered")
 def step_impl(context):
-    assert context.browser.current_url == 'http://127.0.0.1:5000/login'
+    assert 'http://127.0.0.1:5000/login' in context.browser.current_url
     assert 'Rejestracja udana' in context.browser.page_source
 
 
@@ -35,5 +35,5 @@ def step_impl(context):
 
 @then("The user is not registered")
 def step_impl(context):
-    assert context.browser.current_url == 'http://127.0.0.1:5000/login'
+    assert context.browser.current_url == 'http://127.0.0.1:5000/register'
     assert 'Nieprawidowy adres e-mail' in context.browser.page_source

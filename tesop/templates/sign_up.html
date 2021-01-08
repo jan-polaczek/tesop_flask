@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block title %}Rejestracja{% endblock %}
+{% block content %}
+    <div class="main">
+        <h2>Zarejestruj się</h2>
+        <form action="register" method="post" enctype="multipart/form-data" id="register-form">
+        <ul>
+            <li class="form-group my-3">
+                <label for="email" class="hidden">Adres email</label>
+                <input type="text" id="email" name="email" autocomplete="email" class="form-item" placeholder="Adres email" required minlength="3">
+            </li>
+            <li class="form-group my-3">
+                <label for="username" class="hidden">Nazwa użytkownika</label>
+                <input type="text" id="username" name="username" autocomplete="username" class="form-item" placeholder="Nazwa użytkownika" minlength="4" maxlength="30" required>
+            </li>
+            <li class="form-group my-3">
+                <label for="password" class="hidden">Hasło</label>
+                <input type="password" id="password" name="password" autocomplete="new-password" class="form-item" placeholder="Hasło"  minlength="8" maxlength="60" required>
+            </li>
+            <input type="submit" value="Załóż konto" class="btn btn-primary">
+        </ul>
+        </form>
+    </div>
+{% endblock %}
