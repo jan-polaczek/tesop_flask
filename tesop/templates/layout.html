@@ -14,13 +14,18 @@
                 Strona główna
             </button>
         </a>
+         <a href="{{ url_for('web.blogposts') }}">
+                <button class="btn btn-secondary">
+                    Wszystkie posty
+                </button>
+         </a>
         {% if logged_in %}
             <a href="{{ url_for('web.logout') }}">
                 <button class="btn btn-secondary">
                     Wyloguj
                 </button>
             </a>
-            <a href="#">
+            <a href="{{ url_for('web.blogpost_new') }}">
                 <button class="btn btn-secondary">
                     Dodaj post
                 </button>

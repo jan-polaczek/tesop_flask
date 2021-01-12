@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, session, url_for
 from tesop import models
-import datetime
+import json
 
 
 web = Blueprint('web', __name__, template_folder='templates')
@@ -34,7 +34,12 @@ def sign_up():
 
 @web.route('/login')
 def login():
-    return render_template('login.html', messages=[request.args.get('messages', [])])
+    message = request.args.get('message')
+    if message:
+        messages = [message]
+    else:
+        messages = None
+    return render_template('login.html', messages=messages)
 
 
 @web.route('/logout')
@@ -63,6 +68,30 @@ def register():
     data = request.form.to_dict()
     result = models.User.register(**data)
     if len(result['errors']) == 0:
-        return redirect(url_for('web.login', messages=['Rejestracja udana']))
+        return redirect(url_for('web.login', message='Rejestracja udana'))
     else:
         return render_template('sign_up.html', errors=result['errors'])
+
+
+@web.route('/posts', methods=['GET', 'POST'])
+def blogposts():
+    if request.method == 'GET':
+        posts = models.BlogPost.query.all()
+        return render_template('blogposts.html', posts=posts)
+    elif request.method == 'POST':
+        user = models.Session.query.get(session['sid']).user
+        data = request.form.to_dict()
+        data['user_id'] = user.id
+        post = models.BlogPost.create(**data)
+        return redirect(url_for('web.blogpost_detail', post_id=post.id))
+
+
+@web.route('/posts/new')
+def blogpost_new():
+    return render_template('new_blogpost.html')
+
+
+@web.route('/posts/<post_id>')
+def blogpost_detail(post_id):
+    post = models.BlogPost.query.get(post_id)
+    return render_template('blogpost.html', post=post)

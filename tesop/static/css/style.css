@@ -146,3 +146,15 @@ table tbody tr:nth-child(even) {
     background-color: lightgrey;
 }
 
+.post-title {
+    margin-bottom: 0;
+}
+
+.post-author {
+    margin-bottom: 10px;
+}
+
+.post-content {
+    max-width: 90%;
+    margin: auto;
+}

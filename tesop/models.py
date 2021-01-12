@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 import bcrypt
 import uuid
+import datetime
 from email_validator import validate_email, EmailNotValidError
 
 
@@ -120,3 +121,23 @@ class Session(db.Model):
         db.session.add(s)
         db.session.commit()
         return s
+
+
+class BlogPost(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.String(5000), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User')
+    created_at = db.Column(db.DateTime, default=datetime.datetime.now)
+
+    @staticmethod
+    def create(**kwargs):
+        bp = BlogPost(**kwargs)
+        db.session.add(bp)
+        db.session.commit()
+        return bp
+
+    @hybrid_property
+    def timestamp(self):
+        return self.created_at.strftime('%d-%m-%Y, %H:%M:%S')

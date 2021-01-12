@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block title %}Nowy post{% endblock %}
+{% block content %}
+     <div class="main">
+        <h2>Nowy post</h2>
+        <form action="{{ url_for('web.blogposts') }}" method="post" enctype="multipart/form-data">
+        <ul>
+            <li class="form-group">
+                <label for="title" class="hidden">Tytuł</label>
+                <input type="text" id="title" name="title" class="form-item" placeholder="Tytuł" required maxlength="100">
+            </li>
+            <li class="form-group">
+                <label for="content" class="hidden">Treść</label>
+                <textarea id="content" name="content" required maxlength="5000" placeholder="Treść (maks. 5000 znaków)" cols="50" rows="20"></textarea>
+            </li>
+            <li class="form-group">
+                <input type="submit" value="Zatwierdź" class="btn btn-primary">
+            </li>
+        </ul>
+        </form>
+    </div>
+{% endblock %}

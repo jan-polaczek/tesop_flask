@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+{% block title %}Posty{% endblock %}
+{% block content %}
+     <div class="main">
+        {% for post in posts %}
+            <div class="post-container">
+                <a href="{{ url_for('web.blogpost_detail', post_id=post.id) }}"><h2 class="post-title">{{ post.title }}</h2></a>
+                <div class="post-timestamp">{{ post.timestamp }}</div>
+                <div class="post-author"><i>{{ post.user.username }}</i></div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
